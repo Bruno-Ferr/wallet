@@ -3,13 +3,17 @@ import Header from "@/components/Header";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
+import { ethers } from "ethers";
 import Image from "next/image";
+import Link from "next/link";
 import { redirect } from "next/navigation";
+import { useState } from "react";
 
 export default function Home() {
-
+  const [password, setPassword] = useState('')
+ 
   const logIn = () => {
-    redirect('/yourwallet')
+
   }
 
   return (
@@ -22,10 +26,11 @@ export default function Home() {
       <div className="w-72">
         <div className="grid w-full max-w-sm items-center gap-1.5 mb-4">
           <Label htmlFor="password">Password</Label>
-          <Input type="password" id="password" placeholder="Type your password" />
+          <input type="password" placeholder="Your password" onChange={(e) => setPassword(e.target.value)} />
         </div>
-        <Button className="w-full mb-6" onClick={logIn()}>Sign In</Button>
-        <Button variant="secondary" className="w-full">Create new account</Button>
+        <Button className="w-full mb-1" onClick={() => logIn()}>Sign In</Button>
+        <Link href={'/seedPhrase'} className="underline">Forgot your password?</Link>
+        <Button variant="secondary" className="w-full mt-4">Create new account</Button>
       </div>
     </main>
   );
