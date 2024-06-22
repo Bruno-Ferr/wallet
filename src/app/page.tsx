@@ -1,10 +1,17 @@
+"use client"
 import Header from "@/components/Header";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
 import Image from "next/image";
+import { redirect } from "next/navigation";
 
 export default function Home() {
+
+  const logIn = () => {
+    redirect('/yourwallet')
+  }
+
   return (
     <main className="min-h-[594px] max-w-96 flex flex-col items-center justify-between border border-gray-300 p-24">
       <div>Logo</div>
@@ -17,7 +24,7 @@ export default function Home() {
           <Label htmlFor="password">Password</Label>
           <Input type="password" id="password" placeholder="Type your password" />
         </div>
-        <Button className="w-full mb-6">Sign In</Button>
+        <Button className="w-full mb-6" onClick={logIn()}>Sign In</Button>
         <Button variant="secondary" className="w-full">Create new account</Button>
       </div>
     </main>
