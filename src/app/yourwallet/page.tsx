@@ -1,11 +1,37 @@
 "use client"
+import { Network, Alchemy } from "alchemy-sdk";
 import { ArrowUpRight, ChartLine, PlusMinus } from "@phosphor-icons/react";
+import { useContext, useEffect, useState } from "react";
+import { ethers } from "ethers";
+import { AuthContext } from "@/context/AuthContext";
+import { redirect } from "next/navigation";
 
 export default function YourWallet() {
+  const {wallet} = useContext(AuthContext)
+  const [value, setValue] = useState<any>()
+
+
+  async function getTokens() {
+    // Optional config object, but defaults to demo api-key and eth-mainnet.
+    const settings = {
+      apiKey: "s-vHBaDfU14XzTTkHoaYdhsGp3wKZtKT", // Replace with your Alchemy API Key.
+      network: Network.ETH_MAINNET, // Replace with your network.
+    };
+    const alchemy = new Alchemy(settings);
+
+    const res = await alchemy.core.getBalance(wallet, "latest");
+    setValue(ethers.formatEther(res._hex))
+  }
+
+  useEffect(() => {
+    if(!wallet) redirect('/seedPhrase')
+    getTokens()
+  }, [])
+
   return (
     <div className="min-h-[594px] w-96 flex flex-col items-center border border-gray-300 p-2">
       <div className="flex flex-col items-center py-8">
-        <h2 className="font-semibold text-3xl">0.000001ETH</h2>
+        <h2 className="font-semibold text-3xl">{value}ETH</h2>
         <p>$0.00 USD</p>
       </div>
       <div className="flex gap-2">
@@ -37,7 +63,7 @@ export default function YourWallet() {
                 <p>Ethereum</p>
               </div>
               <div className="flex  flex-col items-end">
-                <h5>0.000001ETH</h5>
+                <h5>{value}ETH</h5>
                 <p>$0.00 USD</p>
               </div>
             </div>
