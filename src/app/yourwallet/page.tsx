@@ -9,6 +9,7 @@ import { redirect } from "next/navigation";
 export default function YourWallet() {
   const {wallet} = useContext(AuthContext)
   const [value, setValue] = useState<any>()
+  const [NFTs, setNFTs] = useState<any>([])
 
 
   async function getTokens() {
@@ -21,6 +22,13 @@ export default function YourWallet() {
 
     const res = await alchemy.core.getBalance(wallet, "latest");
     setValue(ethers.formatEther(res._hex))
+
+    const options = {method: 'GET', headers: {accept: 'application/json'}};
+
+    fetch(`https://eth-mainnet.g.alchemy.com/nft/v3/s-vHBaDfU14XzTTkHoaYdhsGp3wKZtKT/getNFTsForOwner?owner=${wallet}&withMetadata=true&pageSize=100`, options)
+      .then(response => response.json())
+      .then(response => {console.log(response); console.log('oi'); setNFTs(response)})
+      .catch(err => console.error(err));
   }
 
   useEffect(() => {
