@@ -7,34 +7,8 @@ import { AuthContext } from "@/context/AuthContext";
 import { redirect } from "next/navigation";
 
 export default function YourWallet() {
-  const {wallet} = useContext(AuthContext)
-  const [value, setValue] = useState<any>()
-  const [NFTs, setNFTs] = useState<any>([])
-
-
-  async function getTokens() {
-    // Optional config object, but defaults to demo api-key and eth-mainnet.
-    const settings = {
-      apiKey: "s-vHBaDfU14XzTTkHoaYdhsGp3wKZtKT", // Replace with your Alchemy API Key.
-      network: Network.ETH_MAINNET, // Replace with your network.
-    };
-    const alchemy = new Alchemy(settings);
-
-    const res = await alchemy.core.getBalance(wallet, "latest");
-    setValue(ethers.formatEther(res._hex))
-
-    const options = {method: 'GET', headers: {accept: 'application/json'}};
-
-    fetch(`https://eth-mainnet.g.alchemy.com/nft/v3/s-vHBaDfU14XzTTkHoaYdhsGp3wKZtKT/getNFTsForOwner?owner=${wallet}&withMetadata=true&pageSize=100`, options)
-      .then(response => response.json())
-      .then(response => {console.log(response); console.log('oi'); setNFTs(response)})
-      .catch(err => console.error(err));
-  }
-
-  useEffect(() => {
-    if(!wallet) redirect('/seedPhrase')
-    getTokens()
-  }, [])
+  const {wallet, value, NFTs} = useContext(AuthContext)
+  
 
   return (
     <div className="min-h-[594px] w-96 flex flex-col items-center border border-gray-300 p-2">

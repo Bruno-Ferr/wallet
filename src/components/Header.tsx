@@ -10,7 +10,7 @@ export default function Header({}) {
     if (!address) return '';
     return address.substring(0, 6) + '...' + address.substring(address.length - 4);
   }
-
+  
   return (
     <div className="min-h-24 w-96 flex items-center justify-between gap-12 border border-gray-300 border-b-0">
       {
