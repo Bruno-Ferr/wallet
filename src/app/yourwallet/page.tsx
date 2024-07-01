@@ -5,10 +5,15 @@ import { useContext, useEffect, useState } from "react";
 import { ethers } from "ethers";
 import { AuthContext } from "@/context/AuthContext";
 import { redirect } from "next/navigation";
+import Nftpageopt from "@/components/Nftpageopt";
 
 export default function YourWallet() {
   const {wallet, value, NFTs} = useContext(AuthContext)
+  const [currentPage, setCurrentPage] = useState('tokens')
   
+  useEffect(() => {
+    if(!wallet) redirect('/seedPhrase')
+  }, [])
 
   return (
     <div className="min-h-[594px] w-96 flex flex-col items-center border border-gray-300 p-2">
@@ -31,12 +36,12 @@ export default function YourWallet() {
         </button>
       </div>
       <div className="py-8 w-full">
-        <nav className="flex gap-1 items-center w-full text-center">
-          <p className="w-1/3 text-blue-500 border-b-2 border-blue-500">Tokens</p>
-          <p className="w-1/3">NFT</p>
-          <p className="w-1/3">Activity</p>
+        <nav className="flex gap-1 items-center w-full text-center cursor-pointer">
+          <p className={`w-1/3 ${currentPage == 'tokens' && 'text-blue-500 border-b-2 border-blue-500'}`} onClick={() => setCurrentPage('tokens')}>Tokens</p>
+          <p className={`w-1/3 ${currentPage == 'nft' && 'text-blue-500 border-b-2 border-blue-500'}`}  onClick={() => setCurrentPage('nft')}>NFT</p>
+          <p className={`w-1/3 ${currentPage == 'activity' && 'text-blue-500 border-b-2 border-blue-500'}`}  onClick={() => setCurrentPage('activity')}>Activity</p>
         </nav>
-        <div className="w-full mt-2">
+        {currentPage == 'tokens' ? (<div className="w-full mt-2">
           <div className="flex w-full bg-slate-700 p-2">
             <div className="bg-gray-300 rounded-full">Image</div>
             <div className="flex justify-between w-full">
@@ -50,7 +55,12 @@ export default function YourWallet() {
               </div>
             </div>
           </div>
-        </div>
+        </div>) : currentPage == 'nft' ? (
+          <Nftpageopt />
+        ) : (
+          <p>oi</p>
+        )}
+        
       </div>
     </div>
   )

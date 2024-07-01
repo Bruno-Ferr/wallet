@@ -36,7 +36,7 @@ export function AuthProvider({children}: AuthProviderProps) {
 
       setWallet(recoveredWallet.address)
       setIsError(false)
-      getTokens()
+      getTokens(recoveredWallet.address)
       router.push('/yourwallet')
     } catch (err) {
       setIsError(true)
@@ -44,8 +44,7 @@ export function AuthProvider({children}: AuthProviderProps) {
     }
   }
 
-  
-  async function getTokens() {
+  async function getTokens(addr: string) {
     // Optional config object, but defaults to demo api-key and eth-mainnet.
     const settings = {
       apiKey: "s-vHBaDfU14XzTTkHoaYdhsGp3wKZtKT", // Replace with your Alchemy API Key.
@@ -53,12 +52,12 @@ export function AuthProvider({children}: AuthProviderProps) {
     };
     const alchemy = new Alchemy(settings);
 
-    const res = await alchemy.core.getBalance(wallet, "latest");
+    const res = await alchemy.core.getBalance(addr, "latest");
     setValue(ethers.formatEther(res._hex))
 
     const options = {method: 'GET', headers: {accept: 'application/json'}};
 
-    fetch(`https://eth-mainnet.g.alchemy.com/nft/v3/s-vHBaDfU14XzTTkHoaYdhsGp3wKZtKT/getNFTsForOwner?owner=${wallet}&withMetadata=true&pageSize=100`, options)
+    fetch(`https://eth-mainnet.g.alchemy.com/nft/v3/s-vHBaDfU14XzTTkHoaYdhsGp3wKZtKT/getNFTsForOwner?owner=${addr}&withMetadata=true&pageSize=100`, options)
       .then(response => response.json())
       .then(response => {console.log(response); setNFTs(response)})
       .catch(err => console.error(err));
