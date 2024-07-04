@@ -8,17 +8,21 @@ import { redirect } from "next/navigation";
 import Nftpageopt from "@/components/Nftpageopt";
 
 export default function YourWallet() {
-  const {wallet, value, NFTs} = useContext(AuthContext)
+  const {wallet, value, NFTs, sendTx} = useContext(AuthContext)
   const [currentPage, setCurrentPage] = useState('tokens')
   
   useEffect(() => {
     if(!wallet) redirect('/seedPhrase')
   }, [])
 
+  function formatWalletEther(value: string, casasDecimais = 5) {
+    return Number(value).toFixed(casasDecimais);
+  }
+
   return (
     <div className="min-h-[594px] w-96 flex flex-col items-center border border-gray-300 p-2">
       <div className="flex flex-col items-center py-8">
-        <h2 className="font-semibold text-3xl">{value}ETH</h2>
+        <h2 className="font-semibold text-3xl">{value && formatWalletEther(value)}ETH</h2>
         <p>$0.00 USD</p>
       </div>
       <div className="flex gap-2">
@@ -26,7 +30,7 @@ export default function YourWallet() {
           <PlusMinus size={34} className="rounded-full bg-blue-500 text-white" />
           <p>Buy & Sell</p>
         </button>
-        <button className="flex flex-col items-center">
+        <button className="flex flex-col items-center" onClick={() => sendTx('0x19E059c9B1751aCeDd246f4212DF9fbb922FcE49', '0.001')}>
           <ArrowUpRight size={34} className="rounded-full bg-blue-500 text-white" />
           <p>Transfer</p>
         </button>
@@ -50,7 +54,7 @@ export default function YourWallet() {
                 <p>Ethereum</p>
               </div>
               <div className="flex  flex-col items-end">
-                <h5>{value}ETH</h5>
+                <h5>{value && formatWalletEther(value, 7)}ETH</h5>
                 <p>$0.00 USD</p>
               </div>
             </div>

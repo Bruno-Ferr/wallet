@@ -2,6 +2,8 @@
 import { useContext } from "react";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "./ui/Select";
 import { AuthContext } from "@/context/AuthContext";
+import { Copy } from "@phosphor-icons/react";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/Popover";
 
 export default function Header({}) {
   const {wallet} = useContext(AuthContext)
@@ -10,7 +12,11 @@ export default function Header({}) {
     if (!address) return '';
     return address.substring(0, 6) + '...' + address.substring(address.length - 4);
   }
-  
+
+  function copyText(entryText: string){
+    navigator.clipboard.writeText(entryText);
+  }
+
   return (
     <div className="min-h-24 w-96 flex items-center justify-between gap-12 border border-gray-300 border-b-0">
       {
@@ -33,11 +39,21 @@ export default function Header({}) {
               </Select>
             </div>
 
-                <div className="flex flex-col items-center w-1/3">
-                  <p>Address:</p>
-                  <p>{formatWalletAddress(wallet)}</p>
+            <Popover>
+              <PopoverTrigger asChild>
+                <div className="flex flex-col items-center w-1/3 cursor-pointer" onClick={() => copyText(wallet.address)}>
+                  <div className="flex">
+                    <p className="text-black mr-2">Address:</p>
+                    <Copy className="text-gray-500" size={18} />
+                  </div>
+                  <p>{formatWalletAddress(wallet.address)}</p>
                 </div>
-              
+              </PopoverTrigger>
+              <PopoverContent className="w-fit p-1 bg-green-200">
+                <p>Copied!</p>
+              </PopoverContent>
+            </Popover>
+                
             <div className="w-1/3">
               Logo
             </div>

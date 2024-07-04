@@ -11,7 +11,6 @@ import { useContext, useState } from "react"
 export default function seedPhraseLogin() {
   const { logInWithSeedPhrase, isError} = useContext(AuthContext)
   const [seedPhrase, setSeedPhrase] = useState('')
-  const [wallet, setWallet] = useState('')
   //const [isError, setIsError] = useState(false)
 
   // const logInWithSeedPhrase = () => {

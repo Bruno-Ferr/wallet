@@ -36,3 +36,4 @@ yarn-error.log*
 next-env.d.ts
 
 wallet.txt
+next.config.mjs
